@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '0.4.18'
+}
+
+// plugin 定义
+group 'com.jarkata'
+version '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    maven {
+        url "http://maven.aliyun.com/nexus/content/groups/public/"
+    }
+//    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+    maven {
+        url 'https://dl.bintray.com/jetbrains/intellij-plugin-service'
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+//    compile group: 'org.springframework', name: 'spring-context', version: '4.3.26.RELEASE'
+    implementation 'org.apache.dubbo:dubbo:2.7.1'
+    implementation 'com.alibaba:fastjson:1.2.68'
+    implementation 'commons-io:commons-io:2.6'
+//    compile group: 'com.jarkata', name: 'jarkata-facade', version: '1.0-SNAPSHOT'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+
+}
+
+
+intellij {
+    version '2019.2'
+    localPath '/Applications/IntelliJ IDEA CE.app'
+}
+patchPluginXml {
+    changeNotes """
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>"""
+}
+
+

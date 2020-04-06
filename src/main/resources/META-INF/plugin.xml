@@ -1,0 +1,37 @@
+<idea-plugin>
+    <id>com.jarkata.httpclient-plugin</id>
+    <name>HttpClient</name>
+    <vendor email="fx.windy@foxmail.com" url="http://www.jarkata.com">Jakarta.com</vendor>
+
+    <description><![CDATA[
+        1. HttpClient 为一款开源的HTTP 请求发起工具，方便测试HTTP请求
+        2. 可通过HttpClient发起Dubbo接口的测试，使用指定IP的方式直连
+    ]]></description>
+    
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <applicationService serviceInterface="com.jarkata.plugin.client.service.HttpApp"
+                            serviceImplementation="com.jarkata.plugin.client.service.impl.HttpAppImpl"/>
+
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="EditorBasics.EditorHandlerIllustration"
+                class="com.jarkata.plugin.client.action.EditorHandlerIllustration"
+                text="Editor Add Caret"
+                description="Adds a second caret below the existing one.">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <!-- Add your actions here -->
+    </actions>
+    <project-components>
+        <component>
+            <implementation-class>com.jarkata.plugin.client.HttpProjectComponent</implementation-class>
+        </component>
+    </project-components>
+
+
+</idea-plugin>

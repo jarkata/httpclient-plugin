@@ -11,8 +11,14 @@ public class JsonUtils {
      * @param object
      * @return
      */
-    public static String toJson(Object object) {
+    public static String toJsonWithPretty(Object object) {
         return JSON.toJSONString(object, SerializerFeature.PrettyFormat,
+                SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteEnumUsingName,
+                SerializerFeature.WriteBigDecimalAsPlain);
+    }
+
+    public static String toJson(Object object) {
+        return JSON.toJSONString(object,
                 SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteEnumUsingName,
                 SerializerFeature.WriteBigDecimalAsPlain);
     }

@@ -1,39 +1,51 @@
 package com.jarkata.plugin.client.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.jarkata.plugin.client.PluginConstants;
 import com.jarkata.plugin.client.domain.DubboConfigVo;
 import com.jarkata.plugin.client.domain.DubboRequestVo;
+import com.jarkata.plugin.client.enums.LinkModelEnum;
+import com.jarkata.plugin.client.service.BeanFactory;
 import com.jarkata.plugin.client.service.DubboService;
 import com.jarkata.plugin.client.utils.ClassUtils;
-import com.jarkata.plugin.client.utils.DubboUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
+import org.apache.dubbo.config.RegistryConfig;
 import org.apache.dubbo.rpc.service.GenericService;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 处理dubbo接口调用
+ */
 public class DubboServiceImpl implements DubboService {
 
+    private static final ReferenceConfig<GenericService> reference = new ReferenceConfig<>();
+
+    /**
+     * 调用远程服务处理
+     *
+     * @param requestVo
+     * @return
+     * @throws Exception
+     */
     @Override
-    public void execute() {
+    public Object getService(DubboRequestVo requestVo) throws Exception {
 
-    }
+        if (StringUtils.isBlank(requestVo.getClazzUrl())) {
+            throw new IllegalArgumentException("className is Empty");
+        }
 
-    @Override
-    public Object getService(DubboRequestVo requestVo, DubboConfigVo configVo) throws Exception {
-        ReferenceConfig<GenericService> reference = DubboUtils.getReference();
-        reference.setUrl("dubbo://127.0.0.1:20880");
+        GenericService genericService = getObject(requestVo);
 
-        reference.setInterface(requestVo.getClazzUrl());
-        GenericService object = reference.get();
         Class<?> requestClazz = ClassUtils.getClass(requestVo.getClazzUrl());
         Method method = ClassUtils.getMethod(requestClazz, requestVo.getClazzMethod());
         if (method == null) {
             return null;
         }
-
         List<String> parameterTypeList = new ArrayList<>();
         Class<?>[] parameterTypes = method.getParameterTypes();
         for (Class<?> parameterType : parameterTypes) {
@@ -48,10 +60,38 @@ public class DubboServiceImpl implements DubboService {
                 objects.add(null);
             }
         }
-        return object.$invoke(requestVo.getClazzMethod(),
+        return genericService.$invoke(requestVo.getClazzMethod(),
                 parameterTypeList.toArray(new String[]{}),
                 objects.toArray());
 
+    }
+
+    /**
+     * 获取GenericService服务
+     *
+     * @param requestVo
+     * @return
+     */
+    public GenericService getObject(DubboRequestVo requestVo) {
+        DubboConfigVo instance = DubboConfigVo.getInstance();
+        ApplicationConfig applicationConfig = BeanFactory.getBean(ApplicationConfig.class);
+        applicationConfig.setName("idea-plugin-dubbo-client");
+        reference.setId("testId");
+        reference.setGeneric("true");
+        reference.setApplication(applicationConfig);
+        reference.setInterface(requestVo.getClazzUrl());
+        if (LinkModelEnum.P2P.getCode().equals(instance.getLinkModel())) {
+            reference.setUrl(requestVo.getUrl());
+        } else {
+            RegistryConfig registry = BeanFactory.getBean(RegistryConfig.class);
+            registry.setAddress(instance.getRegisterAddress());
+            registry.setId("ideaplugin-dubbo-register");
+            reference.setRegistry(registry);
+        }
+        if (StringUtils.isNotBlank(requestVo.getVersion()) && !PluginConstants.DUBBO_VERSION_DEFAULT.equals(requestVo.getVersion())) {
+            reference.setVersion(requestVo.getVersion());
+        }
+        return reference.get();
     }
 
 }

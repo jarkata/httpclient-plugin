@@ -22,7 +22,7 @@ public class ClassUtils {
      * @throws Exception
      */
     public static Class<?> getClass(String clzzName) throws Exception {
-        if (StringUtils.isNotBlank(clzzName)) {
+        if (StringUtils.isBlank(clzzName)) {
             return null;
         }
         ClassLoader classLoader = getUrlClassLoader();
@@ -40,7 +40,7 @@ public class ClassUtils {
      * @return
      */
     public static Method getMethod(Class<?> selectClazz, String method) {
-        if (selectClazz == null || StringUtils.isNotBlank(method)) {
+        if (selectClazz == null || StringUtils.isBlank(method)) {
             return null;
         }
         for (Method declaredMethod : selectClazz.getDeclaredMethods()) {

@@ -8,6 +8,7 @@ import com.jarkata.plugin.client.service.BeanFactory;
 import com.jarkata.plugin.client.service.impl.DubboServiceImpl;
 import com.jarkata.plugin.client.utils.ClassUtils;
 import com.jarkata.plugin.client.utils.JsonUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -193,12 +194,14 @@ public class DubboTestUrlPanel extends JPanel {
     private DubboRequestVo getDubboRequest() {
         String dubboProtocol = Objects.toString(protocolComBox.getSelectedItem(), "");
         String hostAddr = Objects.toString(hostComboBox.getSelectedItem(), "");
+        hostAddr = StringUtils.trimToEmpty(hostAddr);
         String clazzUrl = Objects.toString(urlComboBox.getSelectedItem(), "");
+        clazzUrl = StringUtils.trimToEmpty(clazzUrl);
         String clazzMethod = Objects.toString(methodComBox.getSelectedItem(), "");
         String dubboVersion = Objects.toString(versionComBox.getSelectedItem(), "");
         DubboRequestVo dubboRequestVo = new DubboRequestVo(dubboProtocol, hostAddr, clazzUrl, clazzMethod);
-        dubboRequestVo.setVersion(dubboVersion);
-        dubboRequestVo.setRequestJson(inputTextArea.getText());
+        dubboRequestVo.setVersion(StringUtils.trimToEmpty(dubboVersion));
+        dubboRequestVo.setRequestJson(StringUtils.trimToEmpty(inputTextArea.getText()));
         return dubboRequestVo;
     }
 

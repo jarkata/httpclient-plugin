@@ -8,6 +8,7 @@ import com.jarkata.plugin.client.enums.CommandEnums;
 import com.jarkata.plugin.client.enums.LinkModelEnum;
 import com.jarkata.plugin.client.utils.FileUtils;
 import com.jarkata.plugin.client.utils.JsonUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -216,10 +217,10 @@ public class DubboConfigurationPanel extends JPanel {
      * @return
      */
     private DubboConfigVo getConfigVo() {
-        DubboConfigVo configVo = new DubboConfigVo(appnameTextField.getText());
-        configVo.setContextPath(contextPathTextField.getText());
-        configVo.setLinkModel(Objects.toString(linkModel.getSelectedItem(), null));
-        configVo.setRegisterAddress(registryAddressTextField.getText());
+        DubboConfigVo configVo = new DubboConfigVo(StringUtils.defaultIfEmpty(appnameTextField.getText(), "ideaplugin"));
+        configVo.setContextPath(StringUtils.trimToEmpty(contextPathTextField.getText()));
+        configVo.setLinkModel(StringUtils.trimToEmpty(Objects.toString(linkModel.getSelectedItem(), null)));
+        configVo.setRegisterAddress(StringUtils.trimToEmpty(registryAddressTextField.getText()));
         return configVo;
     }
 }

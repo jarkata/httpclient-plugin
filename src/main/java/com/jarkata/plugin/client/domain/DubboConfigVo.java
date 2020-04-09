@@ -1,17 +1,10 @@
 package com.jarkata.plugin.client.domain;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.io.Serializable;
 
 /**
  * Dubbo配置
  */
-@Setter
-@Getter
-@ToString
 public class DubboConfigVo implements Serializable {
     private String appname;
     private String contextPath;
@@ -22,6 +15,22 @@ public class DubboConfigVo implements Serializable {
 
     public DubboConfigVo(String appname, String contextPath) {
         this.appname = appname;
+        this.contextPath = contextPath;
+    }
+
+    public String getAppname() {
+        return appname;
+    }
+
+    public void setAppname(String appname) {
+        this.appname = appname;
+    }
+
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    public void setContextPath(String contextPath) {
         this.contextPath = contextPath;
     }
 }

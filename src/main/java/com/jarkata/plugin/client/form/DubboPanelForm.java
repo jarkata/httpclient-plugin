@@ -1,8 +1,6 @@
 package com.jarkata.plugin.client.form;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
@@ -15,9 +13,9 @@ import com.jarkata.plugin.client.enums.CommandEnums;
 import com.jarkata.plugin.client.service.ServiceFactory;
 import com.jarkata.plugin.client.service.impl.DubboServiceImpl;
 import com.jarkata.plugin.client.utils.ClassUtils;
-import com.jarkata.plugin.client.utils.DubboUtils;
 import com.jarkata.plugin.client.utils.FileUtils;
 import com.jarkata.plugin.client.utils.JsonUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.dubbo.config.ApplicationConfig;
 import org.apache.dubbo.config.ReferenceConfig;
 import org.apache.dubbo.config.RegistryConfig;
@@ -31,8 +29,11 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 
@@ -55,6 +56,7 @@ public class DubboPanelForm extends JPanel implements ActionListener {
     private final JTextField registryTextField = new JTextField();
     private DefaultTreeModel defaultTreeModel = null;
     private DefaultMutableTreeNode rootNode = null;
+
 
     public DubboPanelForm() {
         super(new BorderLayout());
@@ -275,6 +277,10 @@ public class DubboPanelForm extends JPanel implements ActionListener {
             Object selectedItem = urlComboBox.getSelectedItem();
             try {
                 Class<?> selectClazz = ClassUtils.getClass(Objects.toString(selectedItem, null));
+                if (selectClazz == null) {
+                    JOptionPane.showMessageDialog(null, selectedItem + "输入的类不存在");
+                    return;
+                }
                 Method[] declaredMethods = selectClazz.getDeclaredMethods();
                 for (Method declaredMethod : declaredMethods) {
                     methodComBox.addItem(declaredMethod.getName());
@@ -293,12 +299,11 @@ public class DubboPanelForm extends JPanel implements ActionListener {
             if (!"comboBoxChanged".equals(event.getActionCommand())) {
                 return;
             }
-            String selectedItem = Objects.toString(methodComBox.getSelectedItem(), "");
-            if ("请选择".equals(selectedItem)) {
+            String method = Objects.toString(methodComBox.getSelectedItem(), "");
+            if ("请选择".equals(method)) {
                 return;
             }
             DubboRequestVo dubboRequest = getDubboRequest();
-            String method = selectedItem;
             try {
                 Class<?> selectClazz = ClassUtils.getClass(dubboRequest.getClazzUrl());
                 Method clazzMethod = ClassUtils.getMethod(selectClazz, method);
@@ -318,6 +323,7 @@ public class DubboPanelForm extends JPanel implements ActionListener {
                 }
                 dubboParamTextArea.setText(JsonUtils.toJson(paramsList));
             } catch (Exception e) {
+                e.printStackTrace();
                 dubboOutputTextArea.setText(e.getMessage());
             }
         });
@@ -349,17 +355,20 @@ public class DubboPanelForm extends JPanel implements ActionListener {
             DubboConfigVo saveVo = getDubboConfigVo();
             System.out.println(saveVo);
         } else if (CommandEnums.COMMAND_SEND.getCommand().equals(actionCommand)) {
-            ApplicationConfig applicationConfig = new ApplicationConfig();
-            applicationConfig.setName("dubbo-test");
-            RegistryConfig registry = new RegistryConfig();
-            registry.setAddress("zookeeper://127.0.0.1:2181");
-            registry.setId("dubbo-register");
+            ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            try {
+                Thread.currentThread().setContextClassLoader(classLoader);
+                DubboServiceImpl dubboService = ServiceFactory.getService("dubboService", DubboServiceImpl.class);
+                System.out.println(dubboService);
 
-            ReferenceConfig<?> reference = new ReferenceConfig<>();
-            reference.setId("testId");
-            reference.setRegistry(registry);
-            reference.setApplication(applicationConfig);
-            System.out.println(reference);
+                Object objectMap = dubboService.getService(getDubboRequest(), getDubboConfigVo());
+                dubboOutputTextArea.setText(JsonUtils.toJson(objectMap));
+            } catch (Exception e) {
+                dubboOutputTextArea.setText(JsonUtils.toJson(e));
+            } finally {
+                Thread.currentThread().setContextClassLoader(contextClassLoader);
+            }
         }
 
     }

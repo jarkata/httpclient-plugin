@@ -7,7 +7,7 @@
         1. HttpClient 为一款开源的HTTP 请求发起工具，方便测试HTTP请求
         2. 可通过HttpClient发起Dubbo接口的测试，使用指定IP的方式直连
     ]]></description>
-    
+
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -33,5 +33,10 @@
         </component>
     </project-components>
 
+    <depends>com.intellij.modules.externalSystem</depends>
+    <depends>com.intellij.modules.idea.community</depends>
+    <depends>com.intellij.modules.java-capable</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
 
 </idea-plugin>

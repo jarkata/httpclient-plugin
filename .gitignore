@@ -2,4 +2,5 @@
 .gradle
 .git/
 build
-
+gradlew
+gradlew.bat

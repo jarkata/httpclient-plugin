@@ -14,7 +14,7 @@ public class DubboServiceImplTest {
     @Test
     public void getService() {
 
-        DubboServiceImpl dubboService = BeanFactory.getService("dubboService", DubboServiceImpl.class);
+        DubboServiceImpl dubboService = BeanFactory.getBean("dubboService", DubboServiceImpl.class);
         System.out.println(dubboService);
         try {
             DubboRequestVo dubboRequestVo = new DubboRequestVo("dubbo", "127.0.0.1:20880", "com.jarkata.facade.DemoFacade", "invoke");

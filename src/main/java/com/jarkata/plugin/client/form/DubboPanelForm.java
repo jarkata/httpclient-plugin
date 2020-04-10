@@ -17,8 +17,11 @@ public class DubboPanelForm extends JPanel {
     public DubboPanelForm() {
         super(new BorderLayout());
         //Dubbo面板
+        DubboOutputPanel dubboOutputPanel = new DubboOutputPanel();
         JTabbedPane httpBodyPanel = new JBTabbedPane();
-        httpBodyPanel.addTab("请求/响应", new DubboTestPanel());
+        httpBodyPanel.addTab("请求/响应", new DubboTestPanel(dubboOutputPanel.getDubboOutputTextArea()));
+        httpBodyPanel.addTab("响应", dubboOutputPanel);
+
         httpBodyPanel.addTab("Dubbo配置", new DubboConfigurationPanel());
         add(httpBodyPanel, BorderLayout.CENTER);
     }

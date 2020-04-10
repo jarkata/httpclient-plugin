@@ -15,9 +15,8 @@ public class DubboTestPanel extends JPanel {
 
     //测试请求参数
     private final JTextArea dubboParamTextArea = new JTextArea();
-    private final JTextArea dubboOutputTextArea = new JTextArea();
 
-    public DubboTestPanel() {
+    public DubboTestPanel(JTextArea dubboOutputTextArea ) {
         super(new BorderLayout());
         //Dubbo Request
         dubboParamTextArea.setText("[]");
@@ -36,14 +35,14 @@ public class DubboTestPanel extends JPanel {
         requestParamPanel.add(httpHeaderLabel, BorderLayout.NORTH);
         requestParamPanel.add(requestScrollPane, BorderLayout.CENTER);
 
-        //Dubbo Output
-        dubboOutputTextArea.setText("{}");
-        dubboOutputTextArea.setTabSize(2);
-        dubboOutputTextArea.setLineWrap(true);
-        dubboOutputTextArea.setAutoscrolls(true);
-        dubboOutputTextArea.setToolTipText("输出请求结果");
-        dubboOutputTextArea.setMargin(JBUI.insets(30));
-        dubboOutputTextArea.setBorder(new MatteBorder(1, 1, 1, 1, JBColor.GRAY.brighter()));
+//        //Dubbo Output
+//        dubboOutputTextArea.setText("{}");
+//        dubboOutputTextArea.setTabSize(2);
+//        dubboOutputTextArea.setLineWrap(true);
+//        dubboOutputTextArea.setAutoscrolls(true);
+//        dubboOutputTextArea.setToolTipText("输出请求结果");
+//        dubboOutputTextArea.setMargin(JBUI.insets(30));
+//        dubboOutputTextArea.setBorder(new MatteBorder(1, 1, 1, 1, JBColor.GRAY.brighter()));
 
         JBScrollPane responseScrollPane = new JBScrollPane(dubboOutputTextArea);
         responseScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

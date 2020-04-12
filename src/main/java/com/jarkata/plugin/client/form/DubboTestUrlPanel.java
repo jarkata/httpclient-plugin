@@ -30,7 +30,7 @@ public class DubboTestUrlPanel extends JPanel {
 
     private JTextArea inputTextArea = null;
     private JTextArea outputTextArea = null;
-    private static final String SELLECT_FLAG = "-------";
+    private static final String SELLECT_FLAG = "    -------    ";
 
     /**
      * Dubbo url 界面
@@ -120,7 +120,8 @@ public class DubboTestUrlPanel extends JPanel {
                 methodComBox.addItem(declaredMethod.getName());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            String message = e.getCause().getMessage();
+            System.out.println(message);
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
     }

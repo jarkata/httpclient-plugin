@@ -11,12 +11,12 @@ import java.awt.*;
 /**
  * Dubbo请求测试发起界面
  */
-public class DubboTestPanel extends JPanel {
+public class DubboRequestPanel extends JPanel {
 
     //测试请求参数
     private final JTextArea dubboParamTextArea = new JTextArea();
 
-    public DubboTestPanel(JTextArea dubboOutputTextArea ) {
+    public DubboRequestPanel(JTextArea dubboOutputTextArea) {
         super(new BorderLayout());
         //Dubbo Request
         dubboParamTextArea.setText("[]");
@@ -35,31 +35,12 @@ public class DubboTestPanel extends JPanel {
         requestParamPanel.add(httpHeaderLabel, BorderLayout.NORTH);
         requestParamPanel.add(requestScrollPane, BorderLayout.CENTER);
 
-//        //Dubbo Output
-//        dubboOutputTextArea.setText("{}");
-//        dubboOutputTextArea.setTabSize(2);
-//        dubboOutputTextArea.setLineWrap(true);
-//        dubboOutputTextArea.setAutoscrolls(true);
-//        dubboOutputTextArea.setToolTipText("输出请求结果");
-//        dubboOutputTextArea.setMargin(JBUI.insets(30));
-//        dubboOutputTextArea.setBorder(new MatteBorder(1, 1, 1, 1, JBColor.GRAY.brighter()));
-
-        JBScrollPane responseScrollPane = new JBScrollPane(dubboOutputTextArea);
-        responseScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        JLabel outputLabel = new JLabel("输出结果");
-
-        JPanel responseOutputPanel = new JPanel(new BorderLayout());
-        responseOutputPanel.add(outputLabel, BorderLayout.NORTH);
-        responseOutputPanel.add(responseScrollPane, BorderLayout.CENTER);
-
         JPanel requestCenterPanel = new JPanel(new GridLayout(1, 2, 1, 3));
         requestCenterPanel.add(requestParamPanel);
-        requestCenterPanel.add(responseOutputPanel);
 
         //请求信息
         DubboTestUrlPanel testUrlPanel = new DubboTestUrlPanel(dubboParamTextArea, dubboOutputTextArea);
         add(testUrlPanel, BorderLayout.NORTH);
-        add(requestCenterPanel, BorderLayout.CENTER);
+        add(requestParamPanel, BorderLayout.CENTER);
     }
 }

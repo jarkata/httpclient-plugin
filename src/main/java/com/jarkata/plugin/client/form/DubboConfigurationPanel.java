@@ -28,7 +28,7 @@ public class DubboConfigurationPanel extends JPanel {
     private final JTextField contextPathTextField = new JTextField();
     private final JTextField registryAddressTextField = new JTextField();
     private final JComboBox<String> linkModel = new ComboBox<>(new DefaultComboBoxModel<>(new String[]{LinkModelEnum.P2P.getCode(), LinkModelEnum.REGISTRY.getCode()}));
-    private JButton jarfileUploadButton = new JButton();
+    private final JButton jarfileUploadButton = new JButton();
     private DefaultTreeModel defaultTreeModel = null;
     private DefaultMutableTreeNode rootNode = null;
 

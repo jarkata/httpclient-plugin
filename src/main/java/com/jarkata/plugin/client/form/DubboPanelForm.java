@@ -1,7 +1,6 @@
 package com.jarkata.plugin.client.form;
 
 import com.intellij.ui.components.JBTabbedPane;
-import com.jarkata.plugin.client.service.BeanFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,11 +16,10 @@ public class DubboPanelForm extends JPanel {
     public DubboPanelForm() {
         super(new BorderLayout());
         //Dubbo面板
-        DubboOutputPanel dubboOutputPanel = new DubboOutputPanel();
+        DubboResponsePanel dubboResponsePanel = new DubboResponsePanel();
         JTabbedPane httpBodyPanel = new JBTabbedPane();
-        httpBodyPanel.addTab("请求/响应", new DubboTestPanel(dubboOutputPanel.getDubboOutputTextArea()));
-        httpBodyPanel.addTab("响应", dubboOutputPanel);
-
+        httpBodyPanel.addTab("请求/响应", new DubboRequestPanel(dubboResponsePanel.getDubboResponseTextArea()));
+        httpBodyPanel.addTab("响应", dubboResponsePanel);
         httpBodyPanel.addTab("Dubbo配置", new DubboConfigurationPanel());
         add(httpBodyPanel, BorderLayout.CENTER);
     }
